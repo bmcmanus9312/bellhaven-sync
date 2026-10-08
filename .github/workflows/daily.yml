@@ -1,0 +1,18 @@
+name: Bellhaven daily demo
+'on':
+  workflow_dispatch:
+  schedule:
+    - cron: '0 10 * * *'
+concurrency:
+  group: bellhaven-daily-demo
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: [self-hosted, Windows]
+    steps:
+      - name: Download sources and prepare review
+        working-directory: ${{ vars.BELLHAVEN_DEMO_FOLDER }}
+        shell: powershell
+        env:
+          BH_API_TOKEN: ${{ secrets.BH_API_TOKEN }}
+        run: .\.venv\Scripts\python.exe pipeline.py
